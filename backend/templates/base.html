@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" {% block html_tag_attributes %}{% endblock %}>
+
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+        <script src="/static/"></script>
+
+
+        <title>{% block title %}Swiss army knife{% endblock %} - swikn</title>
+
+        {% block extra_head %}{% endblock %}
+
+        <meta name="description" content="{% block meta_description %}
+        Description
+        {% endblock meta_description %}" />
+
+
+
+        <script defer data-domain="swikn.xojoc.pw" src="https://plausible.xojoc.pw/js/script.js"></script>
+
+        <script type="module">
+            import init, { add, pretty_print_json } from '/static/swikn_frontend.js';
+
+            window.pretty_print_json = pretty_print_json;
+
+            async function run() {
+                await init();
+                const result = add(1, 2);
+                console.log(`1 + 2 = ${result}`);
+                if (result !== 3)
+                    throw new Error("wasm addition doesn't work!");
+            }
+
+            run();
+        </script>
+    </head>
+
+    <body class="d-flex flex-column">
+        <header>header</header>
+
+        {% block main %}{% endblock %}
+
+        <footer>
+            footer
+        </footer>
+
+    </body>
+
+</html>

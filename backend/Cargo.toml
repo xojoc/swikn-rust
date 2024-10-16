@@ -1,0 +1,21 @@
+[package]
+name="swikn-backend"
+version.workspace = true
+authors.workspace = true
+description.workspace = true
+documentation.workspace = true
+edition.workspace = true
+
+[[bin]]
+name = 'swikn-server'
+path = 'src/swikn-server.rs'
+
+[dependencies]
+axum = "^0"
+serde = { version = "^1", features = ["derive"] }
+tokio = { version = "^1", features = ["full"] }
+tower = { version = "^0", features = ["util"] }
+tower-http = { version = "^0", features = ["fs", "trace"] }
+tracing = "^0"
+tracing-subscriber = { version = "^0", features = ["env-filter"] }
+askama = "^0"
