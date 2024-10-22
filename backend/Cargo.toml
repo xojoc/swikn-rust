@@ -1,5 +1,5 @@
 [package]
-name="swikn-backend"
+name = "swikn-backend"
 version.workspace = true
 authors.workspace = true
 description.workspace = true
@@ -19,3 +19,4 @@ tower-http = { version = "^0", features = ["fs", "trace"] }
 tracing = "^0"
 tracing-subscriber = { version = "^0", features = ["env-filter"] }
 askama = "^0"
+swikn = { path = "../swikn" }

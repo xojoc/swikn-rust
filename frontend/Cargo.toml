@@ -35,12 +35,12 @@ features = [
   'Element',
   'HtmlElement',
   'HtmlTextAreaElement',
+  'HtmlInputElement',
+  'HtmlDivElement',
   'Node',
-  'Window'
+  'NodeList',
+  'Window',
 ]
 
 [dev-dependencies]
 wasm-bindgen-test = "^0"
-
-[profile.release]
-opt-level = "s"

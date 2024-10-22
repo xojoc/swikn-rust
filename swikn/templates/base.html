@@ -14,18 +14,13 @@
                 data-domain="swikn.xojoc.pw"
                 src="https://plausible.xojoc.pw/js/script.js"></script>
         <script type="module">
-            import init, { add, pretty_print_json, get_tools } from '/static/swikn_frontend.js';
+            import init, { call_tool, get_tools } from '/static/swikn_frontend.js';
 
-            window.pretty_print_json = pretty_print_json;
             window.get_tools = get_tools;
+            window.call_tool = call_tool;
 
             async function run() {
                 await init();
-                const result = add(1, 2);
-                console.log(`1 + 2 = ${result}`);
-                if (result !== 3) {
-                    throw new Error("wasm addition doesn't work!");
-                }
             }
 
             run().then((val) => {
@@ -35,6 +30,16 @@
                 // };
                 })
         </script>
+        <!--         <script type="module"> -->
+        <!-- import { basicSetup, EditorView } from "https://esm.sh/codemirror@v6.0.1" -->
+        <!-- import { javascript } from "https://esm.sh/@codemirror/lang-javascript@v6.0.1" -->
+        <!---->
+        <!-- new EditorView({ -->
+        <!-- 	doc: "console.log('hello')\n", -->
+        <!-- 	extensions: [basicSetup, javascript()], -->
+        <!-- 	parent: document.body, -->
+        <!-- }) -->
+        <!-- </script> -->
     </head>
     <body class="d-flex flex-column">
         <header>
@@ -48,4 +53,3 @@
         </footer>
     </body>
 </html>
-

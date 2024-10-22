@@ -23,12 +23,17 @@ async fn main() {
         .route("/", get(index))
         .route("/users", post(create_user))
         .nest_service("/static", ServeDir::new("static"))
-        .route("/greet/:name", get(greet));
+        .route("/greet/:name", get(greet))
+        .route("/:tool", get(tool));
 
-    axum::Server::bind(&"0.0.0.0:3000".parse().unwrap())
-        .serve(app.into_make_service())
-        .await
-        .unwrap();
+    let listener = tokio::net::TcpListener::bind("0.0.0.0:3000").await.unwrap();
+    println!("listening on {}", listener.local_addr().unwrap());
+    axum::serve(listener, app).await.unwrap();
+
+    // axum_server::bind(&"0.0.0.0:3000".parse().unwrap())
+    //     .serve(app.into_make_service())
+    //     .await
+    //     .unwrap();
 }
 
 async fn create_user(
@@ -58,6 +63,9 @@ struct CreateUser {
 struct User {
     id: u64,
     username: String,
+}
+async fn tool(extract::Path(tool): extract::Path<String>) -> impl IntoResponse {
+    Html(swikn::html::html_tool(&tool))
 }
 
 async fn greet(extract::Path(name): extract::Path<String>) -> impl IntoResponse {

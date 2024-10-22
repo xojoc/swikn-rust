@@ -1,20 +1,29 @@
 <html>
 
-    <head>
-        <meta content="text/html;charset=utf-8" http-equiv="Content-Type" />
-    </head>
+<head>
+    <meta content="text/html;charset=utf-8" http-equiv="Content-Type" />
+</head>
 
-    <body>
+<body>
 
-        <!-- <script src="pkg/swikn.js"></script> -->
+    <!-- <script src="pkg/swikn.js"></script> -->
 
-        <!-- Note the usage of `type=module` here as this is an ES6 module -->
+    <!-- Note the usage of `type=module` here as this is an ES6 module -->
 
 
 
-        <textarea rows="5" cols="33" onchange="pretty_print_json(this)">
-    {'a': 3}
-</textarea>
-    </body>
+    <textarea rows="5" cols="33" onchange="pretty_print_json(this)">
+        {'a': 3}
+    </textarea>
+
+
+    <div id="tools-list">
+    </div>
+
+    <script>
+        let div = document.getElementByID('tools-list');
+        div.innerHTML = get_tools()
+    </script>
+</body>
 
 </html>

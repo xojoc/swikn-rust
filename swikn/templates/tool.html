@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block main %}
+    <h1>{{ tool.name() }}</h1>
+    <form data-tool="{{ tool.slug() }}" oninput="call_tool(this)">
+        {% if tool.input_type() == InputType::TextArea %}
+            <textarea rows="5" cols="33" id="input-{{tool.slug()}}">
+		{"a": 3}
+	</textarea>
+            <textarea rows="5" cols="33" id="output-{{tool.slug()}}">
+	</textarea>
+        {% endif %}
+        {% for parameter in tool.get_parameters().parameters %}
+            {% if parameter.parameter_type == ParameterType::Range %}
+                <input type="number"
+                       data-parameter="{{ parameter.name }}"
+                       name="parameter-{{ parameter.name }}"
+                       id="parameter-{{ parameter.name }}"
+                       min="{{ parameter.range_min }}"
+                       max="{{ parameter.range_max }}"
+                       step="{{ parameter.range_step }}"
+                       value="{{ parameter.integer_value }}" />
+            {% endif %}
+            <div id="error-{{ tool.slug() }}"></div>
+        </form>
+    {% endfor %}
+{% endblock main %}

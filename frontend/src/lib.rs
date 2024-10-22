@@ -1,11 +1,10 @@
 use swikn;
+use swikn::tools;
 use wasm_bindgen::prelude::*;
-use web_sys::HtmlTextAreaElement;
+use web_sys::{HtmlDivElement, HtmlElement, HtmlInputElement, HtmlTextAreaElement};
 
 #[wasm_bindgen]
 extern "C" {
-    // Use `js_namespace` here to bind `console.log(..)` instead of just
-    // `log(..)`
     #[wasm_bindgen(js_namespace = console)]
     fn log(s: &str);
 }
@@ -24,7 +23,7 @@ fn main() -> Result<(), JsValue> {
 
     // Manufacture the element we're gonna append
     let val = document.create_element("p")?;
-    val.set_inner_html(swikn::test_library());
+    val.set_inner_html(tools::test_library());
 
     body.append_child(&val)?;
 
@@ -32,17 +31,62 @@ fn main() -> Result<(), JsValue> {
 }
 
 #[wasm_bindgen]
-pub fn add(a: u32, b: u32) -> u32 {
-    a + b
+pub fn call_tool(e: HtmlElement) {
+    let Some(data_tool) = e.get_attribute("data-tool") else {
+        return;
+    };
+
+    for mut tool in tools::get_all_tools() {
+        if tool.slug() == data_tool {
+            let parameters_nodes = e.query_selector_all("input[data-parameter]").unwrap();
+            for pn in parameters_nodes.values() {
+                let pn = pn.unwrap();
+                let pn = pn.dyn_into::<HtmlInputElement>().unwrap();
+                let pname = pn.get_attribute("data-parameter").unwrap();
+                tool.get_mut_parameters()
+                    .set_parse_string(&pname, &pn.value());
+            }
+
+            let error_elt = e
+                .query_selector(&format!("#error-{}", tool.slug()))
+                .unwrap()
+                .unwrap();
+            let error_elt = error_elt.dyn_into::<HtmlDivElement>().unwrap();
+
+            let output_elt = e
+                .query_selector(&format!("#output-{}", tool.slug()))
+                .unwrap()
+                .unwrap();
+            let output_elt = output_elt.dyn_into::<HtmlTextAreaElement>().unwrap();
+
+            let Some(input_elt) = e
+                .query_selector(&format!("#input-{}", tool.slug()))
+                .unwrap()
+            else {
+                return;
+            };
+            let input_elt: HtmlTextAreaElement = input_elt.dyn_into().unwrap();
+            let v = input_elt.value();
+
+            let t = tool.transform(&v);
+            match t {
+                Ok(t) => {
+                    error_elt.set_inner_html("");
+                    output_elt.set_value(&t)
+                }
+                Err(err) => error_elt.set_inner_html(&format!("<p>{}</p>", err)),
+            }
+
+            // e.set_value(&t);
+            // e.set_value(&t);
+            return;
+        }
+    }
 }
 
 #[wasm_bindgen]
-pub fn pretty_print_json(e: HtmlTextAreaElement) {
-    use serde_json;
-    log("called");
-    log(&e.value());
-    let v: serde_json::Value = serde_json::from_str(&e.value()).unwrap();
-    let pp = serde_json::to_string_pretty(&v).unwrap();
-    log(&pp);
-    e.set_value(&pp)
+pub fn get_tools() -> String {
+    swikn::html::html_all_tools()
+
+    // swikn::html::
 }
